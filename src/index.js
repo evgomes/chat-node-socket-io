@@ -1,4 +1,5 @@
 const express = require('express');
+/*
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const cookieClear = require('./middlewares/cookie-clear');
@@ -12,8 +13,13 @@ const _ = require('lodash');
 
 const { User } = require('./models/user');
 const { hash, hashMatches } = require('./helpers/cryptography');
-
+*/
 const app = express();
+require('./startup/views')(app);
+require('./startup/routes')(app);
+require('./startup/db')();
+
+/*
 app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(session({
@@ -30,8 +36,7 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine','hbs');
 
 // Static content
-app.use('/css', express.static(path.join(__dirname, 'views', 'css')));
-app.use('/js', express.static(path.join(__dirname, 'views', 'js')));
+
 
 
 // views
@@ -41,7 +46,6 @@ app.route('/')
     })
     .post(async (req, res) => {
         const credentials = _.pick(req.body, ['login', 'password']);
-        console.log(credentials);
 
         const user = await User.findOne({ login: credentials.login });
         if(!user) {
@@ -85,6 +89,8 @@ app.route('/cadastro')
 
 mongoose.connect('mongodb://localhost:27017/chat_node', { useNewUrlParser: true })
         .then(() => console.log(`Connected to database...`));
+
+*/
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
