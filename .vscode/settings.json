@@ -1,0 +1,6 @@
+{
+    "codemetrics.basics.ComplexityLevelExtremeDescription": "(extreme)",
+    "codemetrics.basics.ComplexityLevelHighDescription": "(high)",
+    "codemetrics.basics.ComplexityLevelLowDescription": "(low)",
+    "codemetrics.basics.ComplexityLevelNormalDescription": "(normal)"
+}

@@ -1,5 +1,5 @@
 const express = require('express');
-const sessionChecker = require('../middlewares/session-checker');
+const onlyNotAuthenticated = require('../middlewares/only-not-authenticated');
 
 const router = express.Router();
 const _ = require('lodash');
@@ -7,7 +7,7 @@ const _ = require('lodash');
 const { User } = require('../models/user');
 const { hashMatches } = require('../helpers/cryptography');
 
-router.get('/', sessionChecker, (_, res) => {
+router.get('/', onlyNotAuthenticated, (_, res) => {
     return res.render('index.hbs');
 });
 
