@@ -3,11 +3,10 @@
 document.addEventListener('DOMContentLoaded', function () {
     const id = document.querySelector('#userid').value;
     const login = document.querySelector('#username').value;
-
     const user = { id, login };
+    
     const messageInput = document.querySelector('#message');
     const messagesList = document.querySelector('#messages');
-    const usersList = document.querySelector('#usersList');
     const sendButton = document.querySelector('#send');
     const logout = document.querySelector('#logout');
 
@@ -73,16 +72,18 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
+    socket.on('PREVIOUS_MESSAGES', function(messages) {
+        for(const messageData of messages) {
+            appendMessage(messageData);
+        }
+    });
+
     socket.on('MESSAGE', function (messageData) {
         if (messageData.userId === user.id) {
             return;
         }
 
         appendMessage(messageData);
-    })
-
-    socket.on('disconnected', function () {
-        io.emit('USER_DISCONNECTED', user);
     });
 
     sendButton.addEventListener('click', function (e) {
