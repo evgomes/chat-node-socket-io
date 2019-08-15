@@ -11,11 +11,7 @@
     <link rel="stylesheet" href="/css/layout.css">
     <link rel="stylesheet" href="/css/loader.css">
     <link rel="stylesheet" href="/css/fontawesome.all.min.css">
-    <style>
-        html, body {
-            height: 100%;
-        }
-    </style>
+    <link rel="stylesheet" href="/css/signup.css">
 </head>
 
 <body class="bg bg-primary">
@@ -36,8 +32,8 @@
                 <div class="card-header font-weight-bold d-flex justify-content-center">
                     <h2>Cadastro</h2>
                 </div>
-                <div class="card-body">
-                    <form class="w-100 p-1" method="POST" action="/cadastro">
+                <form class="w-100 p-1">
+                    <div class="card-body pt-1 pb-1">
                         <div class="form-group">
                             <label for="name">Nome <span class="text-danger">*</span></label>
                             <input type="text" id="name" name="name" class="form-control" required maxlength="100">
@@ -56,9 +52,11 @@
                             <input id="passwordConfirmation" name="passwordConfirmation" type="password"
                                 class="form-control" required minlength="6" maxlength="32">
                         </div>
+                    </div>
+                    <div class="card-footer m-0">
                         <button type="submit" class="btn btn-primary btn-block">Enviar</button>
-                    </form>
-                </div>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
@@ -73,33 +71,8 @@
         integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
         crossorigin="anonymous"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-    <script src="js/serialize.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            var form = document.querySelector('form');
-            var loader = document.querySelector('.backdrop');
-
-            form.addEventListener('submit', function (e) {
-                e.preventDefault();
-
-                loader.classList.remove('d-none');
-                var data = serialize(e.target);
-
-                axios.post('/cadastro', data)
-                    .then(function (res) {
-                        loader.classList.add('d-none');
-                        var response = { ...res.data };
-
-                        alert(response.message);
-                        if (!response.success) {
-                            return;
-                        }
-
-                        window.location.href = '/';
-                    });
-            })
-        });
-    </script>
+    <script src="/js/serialize.js"></script>
+    <script src="/js/signup.js"></script>
 </body>
 
 </html>

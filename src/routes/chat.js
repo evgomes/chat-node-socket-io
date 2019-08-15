@@ -8,7 +8,7 @@ const { User } = require('../models/user');
 router.get('/', onlyAuthenticated, async (req, res) => {
     const users = await User.find({});
     const usersMap = users.map(u => ({ id: u._id.toString(), login: u.login }))
-        .filter(u => u.id !== req.session.user._id);
+                          .filter(u => u.id !== req.session.user._id);
 
     return res.render('chat.hbs', {
         id: req.session.user._id,

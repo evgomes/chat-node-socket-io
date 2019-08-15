@@ -6,37 +6,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Chat</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" 
+          href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" 
+          crossorigin="anonymous">
     <link rel="stylesheet" href="/css/fontawesome.all.min.css">
-    <style>
-        html,
-        body {
-            position: relative;
-            height: 100%;
-        }
-
-        .container-chat {
-            max-height: calc(100vh - 60px);
-        }
-
-        #messages {
-            overflow-y: scroll;
-            height: 380px;
-        }
-
-        @media(max-width: 768px) {
-            #messages {
-                height: 100px;
-            }
-        }
-
-        @media(min-width: 1024px) {
-            .navbar {
-                height: 60px;
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="/css/chat.css">
 </head>
 
 <body class="bg-primary">
@@ -81,14 +56,14 @@
                     Conversa <i class="fa fa-comment-dots"></i>
                 </div>
                 <div class="card-body rounded-0">
-                    <!-- Message list -->
+                    <!-- Messages list -->
                     <ul id="messages" class="list-group">
                     </ul>
                 </div>
                 <div class="card-footer">
                     <div class="row">
                         <div class="col-12 col-md-9 mb-2">
-                            <!-- Message send -->
+                            <!-- Send message -->
                             <input type="text" id="message" name="message" class="form-control">
                         </div>
                         <div class="col-12 col-md-3 mb-2">
@@ -116,123 +91,7 @@
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script src="/js/socket.io.js"></script>
     <script src="/js/moment.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const id = document.querySelector('#userid').value;
-            const login = document.querySelector('#username').value;
-
-            const user = { id, login };
-            const messageInput = document.querySelector('#message');
-            const messagesList = document.querySelector('#messages');
-            const usersList = document.querySelector('#usersList');
-            const sendButton = document.querySelector('#send');
-            const logout = document.querySelector('#logout');
-
-            function markUser(userId, isOnline) {
-                let spanUser = document.querySelector(`#user-${userId}`);
-
-                if (!spanUser) {
-                    return;
-                }
-
-                if (isOnline) {
-                    spanUser.classList.add('text-success');
-                } else {
-                    spanUser.classList.remove('text-success');
-                }
-            }
-
-            function appendMessage(messageData) {
-                const li = document.createElement('li');
-                li.classList.add('list-group-item');
-                li.innerHTML = `<strong>(${moment().format('HH:mm:ss')}) ${messageData.userLogin}:</strong> ${messageData.message}`;
-
-                messagesList.insertBefore(li, messagesList.firstChild);
-            }
-
-            const socket = io();
-            socket.emit('USER_CONNECTED', user);
-            markUser(user.id, true);
-
-            socket.on('USER_CONNECTED', function (connectedUser) {
-                if (connectedUser.id === id) {
-                    return;
-                }
-
-                const li = document.createElement('li');
-                li.classList.add('list-group-item');
-                li.classList.add('text-info');
-
-                li.innerHTML = `(${moment().format('HH:mm:ss')}) ${connectedUser.login} entrou...`;
-
-                messagesList.appendChild(li);
-                markUser(connectedUser.id, true);
-            });
-
-            socket.on('USER_DISCONNECTED', function (disconnectedUser) {
-                if (disconnectedUser.id === id) {
-                    return;
-                }
-
-                const li = document.createElement('li');
-                li.classList.add('list-group-item');
-                li.classList.add('text-danger');
-
-                li.innerHTML = `(${moment().format('HH:mm:ss')}) ${disconnectedUser.login} saiu...`;
-
-                messagesList.appendChild(li);
-                markUser(disconnectedUser.id, false);
-            });
-
-            socket.on('CONNECTED_USERS', function (onlineUsers) {
-                for (const user of onlineUsers) {
-                    markUser(user.id, true);
-                }
-            });
-
-            socket.on('MESSAGE', function (messageData) {
-                if (messageData.userId === user.id) {
-                    return;
-                }
-
-                appendMessage(messageData);
-            })
-
-            socket.on('disconnected', function () {
-                io.emit('USER_DISCONNECTED', user);
-            });
-
-            sendButton.addEventListener('click', function (e) {
-                const message = messageInput.value.trim();
-                if (message === '') {
-                    return;
-                }
-
-                const messageData = { userId: user.id, userLogin: user.login, message: message }
-                socket.emit('MESSAGE', messageData);
-                appendMessage(messageData);
-
-                messageInput.value = '';
-                messageInput.focus();
-            });
-
-            messageInput.addEventListener('keyup', function (e) {
-                if (e.keyCode !== 13) { // Enter
-                    return;
-                }
-
-                sendButton.click();
-            });
-
-            logout.addEventListener('click', function (e) {
-                e.preventDefault();
-
-                socket.emit('USER_DISCONNECTED', user);
-                window.location.href = '/sair';
-            })
-        });
-
-    </script>
+    <script src="/js/chat.js"></script>
 </body>
 
 </html>
