@@ -13,7 +13,6 @@ router.get('/', onlyNotAuthenticated, (_, res) => {
 
 router.post('/', async (req, res) => {
     const user = _.pick(req.body, ['name', 'login', 'password', 'passwordConfirmation']);
-    console.log('user:', user);
 
     if (user.password !== user.passwordConfirmation) {
         return res.send({ success: false, message: 'Senha e confirmação de senha não conferem.' });
