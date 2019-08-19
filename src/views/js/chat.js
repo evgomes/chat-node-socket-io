@@ -4,11 +4,20 @@ document.addEventListener('DOMContentLoaded', function () {
     const id = document.querySelector('#userid').value;
     const login = document.querySelector('#username').value;
     const user = { id, login };
-    
+
     const messageInput = document.querySelector('#message');
     const messagesList = document.querySelector('#messages');
     const sendButton = document.querySelector('#send');
     const logout = document.querySelector('#logout');
+
+    const cleanHTML = function(html) {
+        return sanitizeHtml(html, {
+            allowedTags: ['b', 'i', 'em', 'strong', 'a'],
+            allowedAttributes: {
+                'a': ['href']
+            }
+        });
+    };
 
     function markUser(userId, isOnline) {
         let spanUser = document.querySelector(`#user-${userId}`);
@@ -25,9 +34,14 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function appendMessage(messageData) {
+        const message = cleanHTML(messageData.message);
+        if(message === '') {
+            return;
+        }
+
         const li = document.createElement('li');
         li.classList.add('list-group-item');
-        li.innerHTML = `<strong>(${moment().format('HH:mm:ss')}) ${messageData.userLogin}:</strong> ${messageData.message}`;
+        li.innerHTML = `<strong>(${moment().format('HH:mm:ss')}) ${messageData.userLogin}:</strong> ${message}`;
 
         messagesList.insertBefore(li, messagesList.firstChild);
     }
@@ -72,8 +86,8 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-    socket.on('PREVIOUS_MESSAGES', function(messages) {
-        for(const messageData of messages) {
+    socket.on('PREVIOUS_MESSAGES', function (messages) {
+        for (const messageData of messages) {
             appendMessage(messageData);
         }
     });
