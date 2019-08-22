@@ -4,6 +4,8 @@ Aplicação simples de chat desenvolvida em Node.js, utilizando Socket.IO para f
 
 Foi desenvolvida como estudo de Node.js e tecnologias relacionadas para aplicações web.
 
+![Chat](https://raw.githubusercontent.com/evgomes/chat-node-socket-io/master/images/chat.png "Chat")
+
 ## Principais tecnologias utilizadas
 - [Express.js](https://expressjs.com/pt-br/) (framework para desenvolvimento web com Node.js);
 - [Handlebars.js](https://handlebarsjs.com/) (view engine para desenvolver a camada de front-end);
